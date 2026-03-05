@@ -187,11 +187,18 @@ body.is-spinning .wheel__spinner-container {
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  background: url("./img/prize-bg.png") no-repeat;
+.wheel__popup::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: url("./img/prize-bg.png") no-repeat center center;
   background-size: cover;
-  background-color: rgba(17, 0, 32, 0.85);
-  background-position: center center;
+
+  opacity: 0.95; /* прозрачность фона */
+  z-index: -1;
 }
 
 .popup__close {
@@ -206,35 +213,32 @@ body.is-spinning .wheel__spinner-container {
 }
 
 .popup__text {
-  width: 75%;
+  width: 100%;
   position: absolute;
   left: 50%;
   top: 50%;
 
-  font-size: 22px;
+  font-size: 50px;
   text-align: center;
 
   transform: translate(-50%, -50%);
-
-  /* пусто :( */
 
   position: absolute;
 
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 700;
-  font-size: 30px;
   padding: 15px 30px;
-  /* background: #5f00b3a7; */
-  background: #1c0034;
-  box-shadow: 0 0 40px 20px #340061;
-  border-radius: 1000px;
   /* identical to box height */
   text-transform: uppercase;
 
   color: #ffffff;
 
   text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 /* ============================= */
@@ -337,9 +341,6 @@ body.is-spinning .wheel__spinner-container {
   }
 }
 
-
-
-
 /* ============================= */
 /* PRELOADER */
 /* ============================= */
@@ -354,7 +355,9 @@ body.is-spinning .wheel__spinner-container {
   justify-content: center;
 
   background: radial-gradient(circle at center, #6f00d6 0%, #1c0034 100%);
-  transition: opacity 0.4s ease, visibility 0.4s ease;
+  transition:
+    opacity 0.4s ease,
+    visibility 0.4s ease;
 }
 
 .preloader.loaded {
