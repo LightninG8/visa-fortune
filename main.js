@@ -30,7 +30,6 @@
   ).then((res) => res.json());
 
   let availableSpins = +user["доступно_вращений"] || 0;
-  console.log(availableSpins);
   let dealSpins = +user["сделано_вращений"] || 0;
   let lastPrize = +user["последний_подарок"] || 0;
   let finalPrizeAvailable =
@@ -39,8 +38,6 @@
       : user["есть_финальная_попытка"] == "True"
         ? true
         : false || false;
-
-  finalPrizeAvailable = false;
 
   // список призов
   const prizes = [
@@ -121,7 +118,6 @@
       break;
   }
 
-  console.log(finalPrizeAvailable);
   if (finalPrizeAvailable) {
     disablePrize(1);
     disablePrize(2);
@@ -132,8 +128,6 @@
 
     prizes.find((el) => el.id == 2).dropChance = 100;
   }
-
-  console.log(prizes);
 
   // ---------- Базовая настройка DOM элементов ----------
   availableSpinsElem.textContent = availableSpins;
