@@ -190,7 +190,8 @@ body.is-spinning .wheel__spinner-container {
 
   background: url("./img/prize-bg.png") no-repeat;
   background-size: cover;
-  background-color: rgba(17, 0, 32, 0.673);
+  background-color: rgba(17, 0, 32, 0.85);
+  background-position: center center;
 }
 
 .popup__close {
@@ -205,7 +206,7 @@ body.is-spinning .wheel__spinner-container {
 }
 
 .popup__text {
-  width: 90%;
+  width: 75%;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -223,10 +224,11 @@ body.is-spinning .wheel__spinner-container {
   font-style: normal;
   font-weight: 700;
   font-size: 30px;
-  padding: 5px 15px;
-  background: #5f00b374;
-  box-shadow: 0 0 20px #5f00b3;
-  border-radius: 15px;
+  padding: 15px 30px;
+  /* background: #5f00b3a7; */
+  background: #1c0034;
+  box-shadow: 0 0 40px 20px #340061;
+  border-radius: 1000px;
   /* identical to box height */
   text-transform: uppercase;
 
@@ -332,5 +334,47 @@ body.is-spinning .wheel__spinner-container {
   .wheel__spinner-container {
     max-width: 320px;
     max-height: 320px;
+  }
+}
+
+
+
+
+/* ============================= */
+/* PRELOADER */
+/* ============================= */
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: radial-gradient(circle at center, #6f00d6 0%, #1c0034 100%);
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.preloader.loaded {
+  opacity: 0;
+}
+
+.preloader__spinner {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 6px solid rgba(255, 255, 255, 0.2);
+  border-top: 6px solid #ffffff;
+  animation: preloaderSpin 1s linear infinite;
+}
+
+@keyframes preloaderSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }

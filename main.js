@@ -19,7 +19,6 @@
   const dealSpinsElem = document.querySelector(".deal-spins");
   const popupElem = document.querySelector(".popup");
   const popupCloseElem = document.querySelector(".popup__close");
-  const popupBgElem = document.querySelector(".popup__bg");
 
   // ---------- Получение переменных пользователя ----------
   const urlParams = new URLSearchParams(window.location.search);
@@ -385,7 +384,6 @@
 
   // Закрытие попапа
   popupCloseElem.addEventListener("click", onClosePopup);
-  popupBgElem.addEventListener("click", onClosePopup);
 
   // Принудительно пересчитать размеры колеса и центрировать
 
@@ -396,5 +394,15 @@
         .style.setProperty("--rotate", "0");
     };
   });
-  // });
+
+  // ---------- PRELOADER ----------
+  const preloader = document.getElementById("preloader");
+
+  setTimeout(() => {
+    preloader.classList.add("loaded");
+
+    setTimeout(() => {
+      preloader.remove();
+    }, 400);
+  }, 300); // небольшая пауза для плавности
 })();
