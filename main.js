@@ -392,11 +392,21 @@
   // ---------- PRELOADER ----------
   const preloader = document.getElementById("preloader");
 
+  window.addEventListener("load", () => {
+    setTimeout(() => {
+      preloader.classList.add("loaded");
+
+      setTimeout(() => {
+        preloader.remove();
+      }, 400);
+    }, 300); // небольшая пауза для плавности
+  });
+
   setTimeout(() => {
     preloader.classList.add("loaded");
 
     setTimeout(() => {
       preloader.remove();
     }, 400);
-  }, 300); // небольшая пауза для плавности
+  }, 5000); // небольшая пауза для плавности
 })();
