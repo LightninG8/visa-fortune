@@ -13,11 +13,8 @@
   // tg.ready(async () => {
   // ---------- DOM элементы ----------
   const wheelSpinnerElem = document.querySelector(".wheel__spinner");
-  const wheelSpinButtonElem = document.querySelector(".wheel__button_spin");
-  const wheelNoSpinButtonElem = document.querySelector(
-    ".wheel__button_no-spin",
-  );
-  const wheelPrizeButtonElem = document.querySelector(".wheel__button_prize");
+  const wheelSpinButtonElem = document.querySelector(".spin-img");
+
   const availableSpinsElem = document.querySelector(".available-spins");
   const dealSpinsElem = document.querySelector(".deal-spins");
   const popupElem = document.querySelector(".popup");
@@ -34,6 +31,7 @@
   ).then((res) => res.json());
 
   let availableSpins = +user["доступно_вращений"] || 0;
+  console.log(availableSpins);
   let dealSpins = +user["сделано_вращений"] || 0;
   let lastPrize = +user["последний_подарок"] || 0;
   let finalPrizeAvailable =
@@ -42,6 +40,8 @@
       : user["есть_финальная_попытка"] == "True"
         ? true
         : false || false;
+
+  finalPrizeAvailable = false;
 
   // список призов
   const prizes = [
@@ -54,6 +54,11 @@
       text: "фидбек на твои биты / треки",
       dropChance: 25,
       id: 2,
+    },
+    {
+      text: "Пусто :(",
+      dropChance: 0,
+      id: 7,
     },
     {
       text: "SPECIAL VISA PACK",
@@ -69,6 +74,11 @@
       text: "VISA & GUEST LOOP PACK",
       dropChance: 21,
       id: 5,
+    },
+    {
+      text: "Пусто :(",
+      dropChance: 0,
+      id: 8,
     },
     {
       text: "секретный муз-подгон",
@@ -127,19 +137,11 @@
   console.log(prizes);
 
   // ---------- Базовая настройка DOM элементов ----------
-  // Выключаем ненужные кнопки
-  wheelPrizeButtonElem.classList.add("hide");
-  wheelNoSpinButtonElem.classList.add("hide");
-
   availableSpinsElem.textContent = availableSpins;
   dealSpinsElem.textContent = dealSpins;
 
   // Если нет вращений
   if (availableSpins <= 0) {
-    wheelSpinButtonElem.classList.add("hide");
-    wheelPrizeButtonElem.classList.add("hide");
-    wheelNoSpinButtonElem.classList.remove("hide");
-
     availableSpinsElem.textContent = "0";
   }
 
@@ -253,8 +255,6 @@
     dealSpinsElem.textContent = dealSpins;
 
     if (availableSpins <= 0) {
-      wheelSpinButtonElem.classList.add("hide");
-      wheelNoSpinButtonElem.classList.remove("hide");
     }
   }
 
@@ -286,6 +286,12 @@
   // ---------- Функции обработчиков событий ----------
   function onSpinButtonClick() {
     if (isSpinning) {
+      return;
+    }
+
+    if (availableSpins <= 0) {
+      alert("Нет вращений");
+
       return;
     }
 
@@ -370,9 +376,6 @@
     }, 300);
   }
 
-  function onNoSpinButtonClick() {
-    // document.querySelector(".no-spins-button button")?.click();
-  }
   // ---------- Обработчики событий ----------
   // Начало анимации
   wheelSpinButtonElem.addEventListener("click", onSpinButtonClick);
@@ -383,7 +386,6 @@
   // Закрытие попапа
   popupCloseElem.addEventListener("click", onClosePopup);
   popupBgElem.addEventListener("click", onClosePopup);
-  wheelNoSpinButtonElem.addEventListener("click", onNoSpinButtonClick);
 
   // Принудительно пересчитать размеры колеса и центрировать
 
