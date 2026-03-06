@@ -408,20 +408,17 @@
   // Закрытие попапа
   popupCloseElem.addEventListener("click", onClosePopup);
 
-  // Принудительно пересчитать размеры колеса и центрировать
+  // ---------- PRELOADER ----------
+  const preloader = document.getElementById("preloader");
 
   window.addEventListener("load", () => {
+    // Принудительно пересчитать размеры колеса и центрировать
     document.querySelector(".wheel-img").onload = () => {
       document
         .querySelector(".wheel__spinner")
         .style.setProperty("--rotate", "0");
     };
-  });
 
-  // ---------- PRELOADER ----------
-  const preloader = document.getElementById("preloader");
-
-  window.addEventListener("load", () => {
     setTimeout(() => {
       preloader.classList.add("loaded");
 
@@ -437,5 +434,5 @@
     setTimeout(() => {
       preloader.remove();
     }, 400);
-  }, 5000); // небольшая пауза для плавности
+  }, 1000); // небольшая пауза для плавности
 })();
