@@ -189,22 +189,20 @@
   let isSpinning = false;
 
   // ---------- Сервисные функции ----------
-  let audioCtx;
-  let clickBuffer;
+  // 1. Загружаем звук один раз
+  const baseClickAudio = new Audio("./click_wheel.mp3");
+  baseClickAudio.preload = "auto";
 
-  fetch("./click_wheel.mp3")
-    .then((r) => r.arrayBuffer())
-    .then((data) => {
-      window.clickSoundData = data;
-    });
+  // Ждём, пока звук загрузится
+  baseClickAudio.addEventListener("canplaythrough", () => {
+    console.log("Звук загружен и готов");
+  });
 
+  // 2. Функция воспроизведения тика
   function doClickSound() {
-    if (!audioCtx || !clickBuffer) return;
-
-    const source = audioCtx.createBufferSource();
-    source.buffer = clickBuffer;
-    source.connect(audioCtx.destination);
-    source.start(0);
+    // создаём клон звука, чтобы одновременно можно было играть несколько
+    const tick = baseClickAudio.cloneNode(true);
+    tick.play().catch((e) => console.warn("Не удалось воспроизвести звук:", e));
   }
 
   function getElemRotationAngle(elem) {
@@ -253,7 +251,7 @@
 
   // ---------- функции ----------
   function showPrizePopup(index) {
-    document.querySelector(".popup__text").textContent = prizes[index].text;
+    document.querySelector(".popup__title").textContent = prizes[index].text;
     popupElem.classList.remove("hide");
     popupElem.classList.add("fade-in");
   }
@@ -296,17 +294,6 @@
 
   // ---------- Функции обработчиков событий ----------
   function onSpinButtonClick() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      audioCtx.decodeAudioData(window.clickSoundData.slice(0), (buffer) => {
-        clickBuffer = buffer;
-      });
-    }
-
-    if (audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
-
     if (isSpinning) {
       return;
     }
@@ -408,17 +395,20 @@
   // Закрытие попапа
   popupCloseElem.addEventListener("click", onClosePopup);
 
-  // ---------- PRELOADER ----------
-  const preloader = document.getElementById("preloader");
+  // Принудительно пересчитать размеры колеса и центрировать
 
   window.addEventListener("load", () => {
-    // Принудительно пересчитать размеры колеса и центрировать
     document.querySelector(".wheel-img").onload = () => {
       document
         .querySelector(".wheel__spinner")
         .style.setProperty("--rotate", "0");
     };
+  });
 
+  // ---------- PRELOADER ----------
+  const preloader = document.getElementById("preloader");
+
+  window.addEventListener("load", () => {
     setTimeout(() => {
       preloader.classList.add("loaded");
 
@@ -434,5 +424,5 @@
     setTimeout(() => {
       preloader.remove();
     }, 400);
-  }, 1000); // небольшая пауза для плавности
+  }, 5000); // небольшая пауза для плавности
 })();

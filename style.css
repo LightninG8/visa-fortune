@@ -213,6 +213,7 @@ body.is-spinning .wheel__spinner-container {
 }
 
 .popup__text {
+  
   width: 100%;
   position: absolute;
   left: 50%;
@@ -239,6 +240,11 @@ body.is-spinning .wheel__spinner-container {
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
+}
+
+.popup__subtitle {
+  font-size: 10px;
+  opacity: 0.6;
 }
 
 /* ============================= */
