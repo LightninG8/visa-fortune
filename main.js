@@ -189,20 +189,24 @@
   let isSpinning = false;
 
   // ---------- Сервисные функции ----------
-  // 1. Загружаем звук один раз
-  const baseClickAudio = new Audio("./click_wheel.mp3");
-  baseClickAudio.preload = "auto";
+  // ---------- Инициализация пула звуков ----------
+  const POOL_SIZE = 50; // количество одновременных тиков
+  const tickPool = [];
+  let poolIndex = 0;
 
-  // Ждём, пока звук загрузится
-  baseClickAudio.addEventListener("canplaythrough", () => {
-    console.log("Звук загружен и готов");
-  });
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const tick = new Audio("./click_wheel.mp3");
+    tick.preload = "auto"; // подгрузка в память
+    tickPool.push(tick);
+  }
 
-  // 2. Функция воспроизведения тика
+  // ---------- Функция воспроизведения тика ----------
   function doClickSound() {
-    // создаём клон звука, чтобы одновременно можно было играть несколько
-    const tick = baseClickAudio.cloneNode(true);
+    const tick = tickPool[poolIndex];
+    tick.currentTime = 0; // начинаем с начала
     tick.play().catch((e) => console.warn("Не удалось воспроизвести звук:", e));
+
+    poolIndex = (poolIndex + 1) % POOL_SIZE; // переключаемся на следующий элемент пула
   }
 
   function getElemRotationAngle(elem) {
