@@ -189,34 +189,22 @@
   let isSpinning = false;
 
   // ---------- Сервисные функции ----------
-  function debounce(func, timeout = 300) {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        func.apply(this, args);
-      }, timeout);
-    };
-  }
-
-  let clickAudio;
+  let audioCtx;
+  let clickBuffer;
 
   fetch("./click_wheel.mp3")
     .then((r) => r.arrayBuffer())
     .then((data) => {
-      const ctx = new AudioContext();
-      ctx.decodeAudioData(data, (buffer) => {
-        clickAudio = { ctx, buffer };
-      });
+      window.clickSoundData = data;
     });
 
   function doClickSound() {
-    if (!clickAudio) return;
+    if (!audioCtx || !clickBuffer) return;
 
-    const source = clickAudio.ctx.createBufferSource();
-    source.buffer = clickAudio.buffer;
-    source.connect(clickAudio.ctx.destination);
-    source.start();
+    const source = audioCtx.createBufferSource();
+    source.buffer = clickBuffer;
+    source.connect(audioCtx.destination);
+    source.start(0);
   }
 
   function getElemRotationAngle(elem) {
@@ -251,7 +239,7 @@
 
     let current = 0;
     for (let i = 0; i < items.length; i++) {
-      item = items[i];
+      let item = items[i];
 
       if (current <= chance && chance < current + item.dropChance) {
         return i;
@@ -308,6 +296,17 @@
 
   // ---------- Функции обработчиков событий ----------
   function onSpinButtonClick() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      audioCtx.decodeAudioData(window.clickSoundData.slice(0), (buffer) => {
+        clickBuffer = buffer;
+      });
+    }
+
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+
     if (isSpinning) {
       return;
     }
