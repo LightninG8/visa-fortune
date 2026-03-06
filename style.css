@@ -41,7 +41,7 @@ body {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto auto;
-  gap: 10px;
+  gap: 20px;
 
   padding-bottom: 80px;
   justify-content: center;
@@ -61,7 +61,7 @@ body {
 }
 
 body.hide-controls .wheel__title {
-  animation: fadeOutUp 0.8s forwards;
+  /* animation: fadeOutUp 0.8s forwards; */
 }
 
 /* ============================= */
@@ -83,7 +83,7 @@ body.hide-controls .wheel__title {
 }
 
 body.is-spinning .wheel__spinner-container {
-  transform: scale(1.1);
+  /* transform: scale(1.1); */
 }
 
 .wheel__spinner-container::before {
@@ -137,7 +137,7 @@ body.is-spinning .wheel__spinner-container {
 }
 
 .spin-img {
-  width: 37%;
+  width: 39%;
   z-index: 3;
   cursor: pointer;
 }

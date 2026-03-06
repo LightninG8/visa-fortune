@@ -1,11 +1,45 @@
 (async () => {
-  const someHash =
-    "BKoCLl4yatVvoPUprPXSRj4HLZz9hRfYRnsYLVUcLFisBOsdCFxnsow7vkxd8K0Cfo3Qml8sRttEphpSubdKuza5CenwZDnrXnwMyXc1BSqgPJk7xj3zCAqQdazNZjXP";
   // ---------- TG WEB APP ----------
   const tg = window.Telegram?.WebApp;
 
   if (tg) {
     tg.expand();
+  }
+
+  // ---------- Проверка времени работы (МСК 12:00 - 22:00) ----------
+  function isWheelOpen() {
+    const now = new Date();
+
+    const moscowTime = new Date(
+      now.toLocaleString("en-US", { timeZone: "Europe/Moscow" }),
+    );
+
+    const hours = moscowTime.getHours();
+
+    return hours >= 12 && hours < 22;
+  }
+
+  if (!isWheelOpen()) {
+    document.body.innerHTML = `
+    <div style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      font-size:48px;
+      font-weight:700;
+      color:white;
+      text-align:center;
+      background: url('./img/bg.png');
+      background-size: cover;
+      background-position: center center;
+      font-family:sans-serif;
+    ">
+      VISA SPIN закрыт
+    </div>
+  `;
+
+    return;
   }
 
   // Запускаем всё только после полной готовности WebView
@@ -165,29 +199,25 @@
     };
   }
 
-  let audioCache = {};
+  let clickAudio;
 
-  function doSound(audioPath, time, loop, volume) {
-    let audio = audioCache[audioPath];
-    if (!audio) {
-      audio = new Audio();
-      audio.preload = "auto";
-      audio.src = audioPath;
-      audio.loop = loop;
-      audio.volume = volume;
-      audioCache[audioPath] = audio;
-    }
+  fetch("./click_wheel.mp3")
+    .then((r) => r.arrayBuffer())
+    .then((data) => {
+      const ctx = new AudioContext();
+      ctx.decodeAudioData(data, (buffer) => {
+        clickAudio = { ctx, buffer };
+      });
+    });
 
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.currentTime = time;
-    }
+  function doClickSound() {
+    if (!clickAudio) return;
+
+    const source = clickAudio.ctx.createBufferSource();
+    source.buffer = clickAudio.buffer;
+    source.connect(clickAudio.ctx.destination);
+    source.start();
   }
-
-  const doClickSound = () => {
-    doSound("./click_wheel.mp3", 0.033, false, 0.2);
-  };
 
   function getElemRotationAngle(elem) {
     const wheelSpinnerStyles = window.getComputedStyle(elem);
@@ -262,7 +292,7 @@
   function runwheelTickerAnimation() {
     // взял код анимации отсюда: https://css-tricks.com/get-value-of-css-rotation-through-javascript/
     const angle = getElemRotationAngle(wheelSpinnerElem);
-    const slice = Math.floor((angle + prizeSlice / 2) / prizeSlice);
+    const slice = Math.floor(angle / prizeSlice);
 
     // если появился новый сектор
     if (currentSlice !== slice) {
