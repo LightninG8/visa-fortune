@@ -190,20 +190,22 @@
 
   // ---------- Сервисные функции ----------
   // ---------- Инициализация пула звуков ----------
-  const POOL_SIZE = 50; // количество одновременных тиков
+  const POOL_SIZE = 3;
   const tickPool = [];
   let poolIndex = 0;
 
+  // Создаём пул
   for (let i = 0; i < POOL_SIZE; i++) {
     const tick = new Audio("./click_wheel.mp3");
-    tick.preload = "auto"; // подгрузка в память
+    tick.preload = "auto";
+    tick.volume = 0.5;
     tickPool.push(tick);
   }
 
-  // ---------- Функция воспроизведения тика ----------
+  // Функция воспроизведения тика
   function doClickSound() {
     const tick = tickPool[poolIndex];
-    tick.currentTime = 0; // начинаем с начала
+    tick.currentTime = 0; // перезапускаем с начала
     tick.play().catch((e) => console.warn("Не удалось воспроизвести звук:", e));
 
     poolIndex = (poolIndex + 1) % POOL_SIZE; // переключаемся на следующий элемент пула
