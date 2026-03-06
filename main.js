@@ -189,26 +189,17 @@
   let isSpinning = false;
 
   // ---------- Сервисные функции ----------
-  // ---------- Инициализация пула звуков ----------
-  const POOL_SIZE = 3;
-  const tickPool = [];
-  let poolIndex = 0;
+  // Создаём аудио один раз
+  const tickAudio = new Audio("./click_sound_full.mp3");
+  tickAudio.preload = "auto";
+  tickAudio.volume = 0.5;
 
-  // Создаём пул
-  for (let i = 0; i < POOL_SIZE; i++) {
-    const tick = new Audio("./click_wheel.mp3");
-    tick.preload = "auto";
-    tick.volume = 0.5;
-    tickPool.push(tick);
-  }
-
-  // Функция воспроизведения тика
-  function doClickSound() {
-    const tick = tickPool[poolIndex];
-    tick.currentTime = 0; // перезапускаем с начала
-    tick.play().catch((e) => console.warn("Не удалось воспроизвести звук:", e));
-
-    poolIndex = (poolIndex + 1) % POOL_SIZE; // переключаемся на следующий элемент пула
+  // Функция воспроизведения при клике
+  function playTickTrack() {
+    tickAudio.currentTime = 0; // с начала
+    tickAudio
+      .play()
+      .catch((e) => console.warn("Не удалось воспроизвести звук:", e));
   }
 
   function getElemRotationAngle(elem) {
@@ -288,7 +279,7 @@
 
     // если появился новый сектор
     if (currentSlice !== slice) {
-      doClickSound();
+      // doClickSound();
 
       // после того, как язычок прошёл сектор - делаем его текущим
       currentSlice = slice;
@@ -300,6 +291,8 @@
 
   // ---------- Функции обработчиков событий ----------
   function onSpinButtonClick() {
+    playTickTrack();
+
     if (isSpinning) {
       return;
     }
@@ -324,7 +317,7 @@
       prizeIndex = dropPrize(prizes);
 
       rotation =
-        Math.floor(prizeIndex * -prizeSlice + spinertia(10, 15) * 360) -
+        Math.floor(prizeIndex * -prizeSlice + 12 * 360) -
         sliceOffset -
         Math.random() * (prizeSlice - sliceOffset * 2);
 
