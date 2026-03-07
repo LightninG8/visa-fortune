@@ -44,7 +44,7 @@
 
   // Запускаем всё только после полной готовности WebView
 
-  // tg.ready(async () => {
+  tg.ready(async () => {
   // ---------- DOM элементы ----------
   const wheelSpinnerElem = document.querySelector(".wheel__spinner");
   const wheelSpinButtonElem = document.querySelector(".spin-img");
