@@ -44,7 +44,7 @@
 
   // Запускаем всё только после полной готовности WebView
 
-  tg.ready(async () => {
+  // tg.ready(async () => {
   // ---------- DOM элементы ----------
   const wheelSpinnerElem = document.querySelector(".wheel__spinner");
   const wheelSpinButtonElem = document.querySelector(".spin-img");
@@ -291,8 +291,6 @@
 
   // ---------- Функции обработчиков событий ----------
   function onSpinButtonClick() {
-    playTickTrack();
-
     if (isSpinning) {
       return;
     }
@@ -302,6 +300,8 @@
 
       return;
     }
+
+    playTickTrack();
 
     isSpinning = true;
 
@@ -423,5 +423,5 @@
     setTimeout(() => {
       preloader.remove();
     }, 400);
-  }, 5000); // небольшая пауза для плавности
+  }, 3000); // небольшая пауза для плавности
 })();
