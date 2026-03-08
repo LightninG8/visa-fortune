@@ -77,7 +77,7 @@
   const prizes = [
     {
       text: "1 на 1 созвон с VisaGangBeatz",
-      dropChance: 1,
+      dropChance: 0,
       id: 1,
     },
     {
