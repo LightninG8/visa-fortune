@@ -20,27 +20,28 @@
   }
 
   // if (!isWheelOpen()) {
-  //   document.body.innerHTML = `
-  //   <div style="
-  //     display:flex;
-  //     align-items:center;
-  //     justify-content:center;
-  //     height:100vh;
-  //     font-size:48px;
-  //     font-weight:700;
-  //     color:white;
-  //     text-align:center;
-  //     background: url('./img/bg.png');
-  //     background-size: cover;
-  //     background-position: center center;
-  //     font-family:sans-serif;
-  //   ">
-  //     VISA SPIN закрыт
-  //   </div>
-  // `;
+  if (true) {
+    document.body.innerHTML = `
+    <div style="
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      font-size:48px;
+      font-weight:700;
+      color:white;
+      text-align:center;
+      background: url('./img/bg.png');
+      background-size: cover;
+      background-position: center center;
+      font-family:sans-serif;
+    ">
+      VISA SPIN закрыт
+    </div>
+  `;
 
-  //   return;
-  // }
+    return;
+  }
 
   // Запускаем всё только после полной готовности WebView
 
